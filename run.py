@@ -1,7 +1,6 @@
 import subprocess
 import linecache
 import re
-import panda as pd
 import matplotlib.pyplot as plt
 
 # open change file and get parametes 
@@ -45,7 +44,7 @@ def get_result(para_name, para_list, var_num):
         foutput = open('output', 'w')
         for line_in_cleanup in fcleanup:
             if para_name_split[0] not in line_in_cleanup:
-                pass
+                finter.write(line_in_cleanup)
             else:
                 #splitlist = line_in_cleanup.split(" ")
                 #splitlist[len(splitlist) - 1] = data + "\r\n"
