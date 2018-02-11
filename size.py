@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 # open change file and get parametes 
 def get_parameter(filename):
     fchange = open(filename, 'r')
-    linecount = 0;
-    var_num = 0;
+    linecount = 0
+    var_num = 0
     para_list = []
     for line_in_change in fchange:
         if(line_in_change == "\n"):
@@ -29,7 +29,7 @@ def get_line(filename, n):
     with open(filename, 'r') as f:
         for line_number, line in enumerate(f):
             if line_number == n - 1:
-                return line
+                return str(line)
 
 def get_result(para_name, para_list, var_num):
     count = 0
@@ -48,8 +48,8 @@ def get_result(para_name, para_list, var_num):
             else:
                 #splitlist = line_in_cleanup.split(" ")
                 #splitlist[len(splitlist) - 1] = data + "\r\n"
-                finter.write(' '.join(para_name_split) + data + "\r\n")
-                print ' '.join(' '.join(para_name_split) + data + "\r\n")
+                finter.write(' '.join(para_name_split) + ": " +  data + "\r\n")
+                print (' '.join(para_name_split) + ": " + data + "\r\n")
     
         fcleanup.close()
         finter.close()
@@ -58,7 +58,11 @@ def get_result(para_name, para_list, var_num):
 
         # get the specific result that we want
         line = get_line('output', var_num)
-        line_split = re.split('[:\-=]+', line)
+        try:
+            line_split = re.split('[:\-=]+', line)
+        except TypeError:
+            print(data + " no avalible solution")
+            continue
         rst_name = line_split[1].strip()
         result_value = line_split[len(line_split) - 1].strip()
         value = int(re.search(r'\d+', result_value).group())
