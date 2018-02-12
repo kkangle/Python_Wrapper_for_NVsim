@@ -6,6 +6,7 @@ all_file_list = ["sample_PCRAM.cfg",
                  "sample_STTRAM_macro.cfg",
                 ]
 
+all_type_list = ["PCRAM", "SLCNAND", "STTRAM"]
 
 def get_parameter(filename) :
     fchange = open(filename, 'r')
@@ -77,4 +78,12 @@ para, var_str = get_parameter("change")
 open_all_files(para)
 result_list = call_subprocess(var_str)
 print(result_list)
+
+
+plt.scatter(all_type_list, result_list, s=area, c=colors, alpha=0.5)
+plt.plot(all_type_list,result_list)
+plt.title('result')
+plt.xlabel(all_type_list)
+plt.ylabel(result_list)
+plt.show()
 
