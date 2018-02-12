@@ -2,10 +2,9 @@ import subprocess
 import os
 
 all_file_list = ["sample_PCRAM.cfg",
-                 "sample_RRAM.cfg",
                  "sample_SLCNAND.cfg",
-                 "sample_STTRAM_cache.cfg",
-                 "inter.cfg"]
+                 "sample_STTRAM_macro.cfg",
+                ]
 
 
 def get_parameter(filename) :
@@ -41,26 +40,41 @@ def open_all_files(main_para):
     for f in all_file_list:
         replace_line(f,main_para)
 
-def call_subprocess():
-    foutput = open("output", 'a')
-    for f in all_file_list:
-        result = subprocess.call(["./nvsim", f], shell = True)
-        foutput.write(result)
-    foutput.close()
-
-def get_result(var_str):
-    foutput = open("output", "r")
+def call_subprocess(var_str):
     final_list = []
-    for line in foutput:
-        if var_str in line:
-            line_split = line.split(':')
-            final_list.append((line_split[len(line_split) - 1]).strip())
+    final_list_len = 0
+    foutput = open("output", 'w')
+    for f in all_file_list:
+        print f
+        try:
+            foutput.write(subprocess.check_output(['./nvsim', f]))
+        except:
+            print("no valid solution for" + f)
+        foutput.close()
+        foutput = open("output", "r")
+        for line in foutput:
+            if var_str in line:
+                line_split = line.split(':')
+                final_list.append((line_split[len(line_split) - 1]).strip())
+        if final_list_len == len(final_list):
+           print "no solution"
+        else:
+           print final_list[final_list_len - 1]
     return final_list
+
+
+#def get_result(var_str):
+#    foutput = open("output", "r")
+#    final_list = []
+#    for line in foutput:
+#        if var_str in line:
+#            line_split = line.split(':')
+#            final_list.append((line_split[len(line_split) - 1]).strip())
+#    return final_list
 
 
 para, var_str = get_parameter("change")
 open_all_files(para)
-call_subprocess()
-result_list = get_result(var_str)
+result_list = call_subprocess(var_str)
 print(result_list)
 
